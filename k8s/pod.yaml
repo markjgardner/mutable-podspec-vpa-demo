@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vpa-demo-app
+  labels:
+    app: vpa-demo
+spec:
+  containers:
+  - name: vpa-demo
+    # Using the pre-built image from GitHub Container Registry
+    # For local development, use: vpa-demo:latest with imagePullPolicy: IfNotPresent
+    image: ghcr.io/markjgardner/mutable-podspec-vpa-demo:latest
+    imagePullPolicy: Always
+    env:
+    - name: MEMORY_ALLOC_MB
+      value: "800"
+    - name: WAIT_SECONDS
+      value: "60"
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+      limits:
+        memory: "1Gi"
+        cpu: "500m"
+    # Enable in-place pod resize feature
+    resizePolicy:
+    - resourceName: memory
+      restartPolicy: NotRequired
+    - resourceName: cpu
+      restartPolicy: NotRequired
