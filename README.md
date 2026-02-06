@@ -22,9 +22,23 @@ The application is configured via environment variables:
 - `MEMORY_ALLOC_MB`: Amount of memory to allocate in megabytes (default: 512)
 - `WAIT_SECONDS`: Time to wait before releasing memory in seconds (default: 30)
 
+## Container Image
+
+Pre-built container images are automatically published to GitHub Container Registry via GitHub Actions:
+
+```bash
+ghcr.io/markjgardner/mutable-podspec-vpa-demo:latest
+```
+
+Available tags:
+- `latest` - Latest build from the main branch
+- `v*` - Semantic version tags (e.g., `v1.0.0`, `v1.0`, `v1`)
+- `main` - Latest build from the main branch
+- `<branch>-<sha>` - Specific commit builds
+
 ## Building the Application
 
-### Build the Docker Image
+### Build the Docker Image Locally
 
 ```bash
 docker build -t vpa-demo:latest .
@@ -50,14 +64,23 @@ MEMORY_ALLOC_MB=1024 WAIT_SECONDS=60 go run main.go
 
 ### Deploy the Application
 
-1. Load the Docker image into your cluster (e.g., for kind or minikube):
+1. **Option A: Use the pre-built GHCR image** (Recommended)
+   ```bash
+   # The pod.yaml already references the GHCR image
+   kubectl apply -f k8s/pod.yaml
+   kubectl apply -f k8s/vpa.yaml
+   ```
+
+2. **Option B: Build and load locally** (for development/testing):
    ```bash
    docker build -t vpa-demo:latest .
    # For kind:
    kind load docker-image vpa-demo:latest
    # For minikube:
    minikube image load vpa-demo:latest
+   # Then update k8s/pod.yaml to use image: vpa-demo:latest with imagePullPolicy: IfNotPresent
    ```
+
 
 2. Deploy the pod:
    ```bash
@@ -113,6 +136,30 @@ The pod is configured with `resizePolicy` set to `NotRequired` for both memory a
 kubectl delete -f k8s/vpa.yaml
 kubectl delete -f k8s/pod.yaml
 ```
+
+## CI/CD
+
+This repository uses GitHub Actions to automatically build and publish container images to GitHub Container Registry (GHCR).
+
+### Workflow Triggers
+
+The workflow (`.github/workflows/docker-publish.yml`) runs on:
+- **Push to main branch**: Builds and publishes with `latest` tag
+- **Version tags** (e.g., `v1.0.0`): Builds and publishes with semantic version tags
+- **Pull requests**: Builds only (no push) to validate changes
+- **Manual trigger**: Can be run manually via workflow_dispatch
+
+### Image Tags
+
+Published images follow these tagging conventions:
+- `latest` - Most recent build from main branch
+- `main` - Latest commit on main branch
+- `v1.0.0`, `v1.0`, `v1` - Semantic version tags
+- `main-<sha>` - Specific commit SHA builds
+
+### Permissions
+
+The workflow uses the built-in `GITHUB_TOKEN` with `packages: write` permission to publish to GHCR. No additional secrets are required.
 
 ## Notes
 

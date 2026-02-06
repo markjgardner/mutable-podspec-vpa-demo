@@ -7,8 +7,10 @@ metadata:
 spec:
   containers:
   - name: vpa-demo
-    image: vpa-demo:latest
-    imagePullPolicy: IfNotPresent
+    # Using the pre-built image from GitHub Container Registry
+    # For local development, use: vpa-demo:latest with imagePullPolicy: IfNotPresent
+    image: ghcr.io/markjgardner/mutable-podspec-vpa-demo:latest
+    imagePullPolicy: Always
     env:
     - name: MEMORY_ALLOC_MB
       value: "800"
