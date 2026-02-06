@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vpa-demo-app
+  labels:
+    app: vpa-demo
+spec:
+  containers:
+  - name: vpa-demo
+    image: vpa-demo:latest
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: MEMORY_ALLOC_MB
+      value: "800"
+    - name: WAIT_SECONDS
+      value: "60"
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+      limits:
+        memory: "1Gi"
+        cpu: "500m"
+    # Enable in-place pod resize feature
+    resizePolicy:
+    - resourceName: memory
+      restartPolicy: NotRequired
+    - resourceName: cpu
+      restartPolicy: NotRequired
