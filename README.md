@@ -51,8 +51,6 @@ To use it:
 2. Open this project in VS Code
 3. Click "Reopen in Container" when prompted
 
-See [.devcontainer/README.md](.devcontainer/README.md) for more details.
-
 ## Building the Application
 
 ### Build the Docker Image Locally
