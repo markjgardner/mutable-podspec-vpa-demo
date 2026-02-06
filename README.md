@@ -79,16 +79,7 @@ MEMORY_ALLOC_MB=1024 WAIT_SECONDS=60 go run main.go
    # For minikube:
    minikube image load vpa-demo:latest
    # Then update k8s/pod.yaml to use image: vpa-demo:latest with imagePullPolicy: IfNotPresent
-   ```
-
-
-2. Deploy the pod:
-   ```bash
    kubectl apply -f k8s/pod.yaml
-   ```
-
-3. Deploy the VPA:
-   ```bash
    kubectl apply -f k8s/vpa.yaml
    ```
 
