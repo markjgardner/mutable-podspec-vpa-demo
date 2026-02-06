@@ -36,6 +36,21 @@ Available tags:
 - `main` - Latest build from the main branch
 - `<branch>-<sha>` - Specific commit builds
 
+## Development Environment
+
+This project includes a [VS Code development container](https://code.visualstudio.com/docs/remote/containers) for a consistent development experience. The devcontainer includes:
+
+- Go 1.21
+- Azure CLI
+- kubectl
+- Docker-in-Docker
+- Helm
+
+To use it:
+1. Install [VS Code](https://code.visualstudio.com/) and the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+2. Open this project in VS Code
+3. Click "Reopen in Container" when prompted
+
 ## Building the Application
 
 ### Build the Docker Image Locally
